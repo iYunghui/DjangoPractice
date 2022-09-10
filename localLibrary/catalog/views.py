@@ -1,6 +1,5 @@
-from multiprocessing import context
-from urllib import request
 from django.shortcuts import render
+from django.views import generic
 from .models import Genre, Language, Book, BookInstance, Author
 
 # Create your views here.
@@ -29,6 +28,9 @@ def author(request):
     render()
 
 
-def books(request):
-    render()
+class BookListView(generic.ListView):
+    model = Book
+    paginate_by = 1
 
+class BookDetailView(generic.DetailView):
+    model = Book
