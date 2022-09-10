@@ -1,3 +1,4 @@
+from ntpath import join
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -10,6 +11,7 @@ import uuid
 class Genre(models.Model):
     name = models.CharField(max_length=255, help_text='Enter a book genre (e.g. Science Fiction)')
 
+    # 在 administration 中默認顯示的名稱
     def __str__(self):
         return self.name
 
@@ -48,6 +50,11 @@ class Book(models.Model):
     def get_absolute_url(self):
         return reverse('book-detail', args=[str(self.id)])
 
+    def display_genre(self):
+        return ', '.join(genre.name for genre in self.genre.all()[:3])
+    
+    display_genre.short_description = 'Genre'
+
 class BookInstance(models.Model):
     uniqueId = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this particular book across whole library')
     due_back = models.DateField(null=True, blank=True)
@@ -67,4 +74,4 @@ class BookInstance(models.Model):
         ordering = ['due_back']
 
     def __str__(self):
-        return f'{self.id} ({self.book.title})'
+        return f'{self.uniqueId} ({self.book.title})'
