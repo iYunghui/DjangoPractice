@@ -2,12 +2,12 @@ from django.contrib import admin
 from .models import Genre, Language, Book, BookInstance, Author
 
 class BookInstanceAdmin(admin.ModelAdmin):
-    list_display = ('book', 'status', 'due_back', 'uniqueId')
+    list_display = ('book', 'status', 'borrower', 'due_back', 'uniqueId')
     list_filter = ('status', 'due_back')
 
     fieldsets = (
         (None, {'fields': ('book', 'imprint', 'uniqueId')}),
-        ('Availability', {'fields': ('status', 'due_back')}),
+        ('Availability', {'fields': ('status', 'due_back', 'borrower')}),
     )
 
 class BooksInstanceInline(admin.TabularInline):

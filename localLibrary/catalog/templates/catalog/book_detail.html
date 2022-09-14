@@ -18,10 +18,10 @@
                 <strong>Status:</strong>{{ copy.get_status_display }}
             </p>
             {% if copy.status != 'a' %}
-                <p><strong>Due to be returned:</strong>{{ copy.due_back }}</p>
+                <p><strong>Due to be returned: </strong>{{ copy.due_back }}</p>
             {% endif %}
-            <p><strong>Imprint:</strong>{{ copy.imprint }}</p>
-            <p><strong>Id:</strong>{{ copy.uniqueId }}</p>
+            <p><strong>Imprint: </strong>{{ copy.imprint }}</p>
+            <p><strong>Id: </strong>{{ copy.uniqueId }}</p>
         {% endfor %}
     </div>
 {% endblock %}
