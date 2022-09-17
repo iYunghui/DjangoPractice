@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"></link>
+        <meta charset="utf-8">
+        {% block title %}<title>Local Library</title>{% endblock %}
+
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-2">
+                    {% block sidebar %}
+                        <ul class="sidebar-nav">
+                            <li><a href="{% url 'poll:index' %}">Home</a></li>
+                        </ul>
+                    {% endblock %}
+                </div>
+    
+                <div class="col-sm-10 ">
+                    {% block content %}
+                    {% endblock %}
+    
+                    {% block pagination %}
+                        {% if is_paginated %}
+                            <div class="pagination">
+                                <span class="page-links">
+                                    {% if page_obj.has_previous %}
+                                        <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Previous</a>
+                                    {% endif %}
+                                        <span class="page-current">
+                                            <p>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</p>
+                                        </span>
+                                    {% if page_obj.has_next %}
+                                        <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">Next</a>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

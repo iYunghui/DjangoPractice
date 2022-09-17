@@ -1,3 +1,5 @@
 migrations/
 *.sqlite3
 venv/
+*.jpg
+*.png
