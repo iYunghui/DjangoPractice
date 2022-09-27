@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <!-- Bootstrap CSS -->
+        <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"></link>
+        <meta charset="utf-8">
+        {% block title %}<title>Museum Practice</title>{% endblock %}
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-2">
+                    {% block sidebar %}
+                        <ul class="sidebar-nav">
+                            <li><a href="{% url 'upload' %}">Upload</a></li>
+                            <li><a href="{% url 'upload_image' %}">Get Image List</a></li>
+                        </ul>
+                    {% endblock %}
+                </div>
+
+                <div class="col-sm-10 ">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
