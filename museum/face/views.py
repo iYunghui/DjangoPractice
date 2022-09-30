@@ -61,7 +61,15 @@ def handle_uploaded_file(f, type):
 
 def write_to_DB(filename, filetype):
     with db_session:
-        Media(uid=os.path.splitext(filename)[0], type=filetype, media_filename=filename, upload_timestamp=datetime.datetime.now())
+        files = select(f for f in Media if f.type == filetype)
+        has_record = 0
+        for f in files:
+            if f.media_filename == filename:
+                f.upload_timestamp = datetime.datetime.now()
+                has_record = 1
+                break
+        if has_record == 0:
+            Media(uid=os.path.splitext(filename)[0], type=filetype, media_filename=filename, upload_timestamp=datetime.datetime.now())
 
 def search_in_DB(filename, filetype):
     with db_session:
