@@ -6,7 +6,7 @@ import datetime
 import os
 from pony.orm import *
 import json
-from django.http import HttpResponse, JsonResponse, FileResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, FileResponse
 from django.core import serializers
 import mimetypes
 
@@ -21,9 +21,18 @@ def upload(request):
 
 def upload_video(request):
     if request.method == 'POST':
-        pass
+        form = UploadVideoForm(request.POST, request.FILES)
+        if form.is_valid():
+            print(request)
+            write_to_DB(request.FILES['upload_file'].name, "video")            
+            handle_uploaded_file(request.FILES['upload_file'], "video")
+            return HttpResponse("upload success", status=200)
+        else:
+            print(request)
+            return HttpResponse(form.errors.as_json())
     elif request.method == 'GET':
-        pass
+        video_files = search_in_DB("", "video")
+        return JsonResponse(video_files, safe=False)
     
 
 def upload_image(request):
@@ -37,15 +46,14 @@ def upload_image(request):
             return HttpResponse(form.errors.as_json())
     elif request.method == 'GET':
         image_files = search_in_DB("", "image")
-        # image_files = serializers.serialize('json', image_files)
-        print(image_files)
         return JsonResponse(image_files, safe=False)
     else:
         return redirect("/api/face/upload")
 
 def video(request, filename):
     if request.method == 'GET':
-        pass
+        
+        return FileResponse(open('face/static/'+"video"+'/'+str(filename), 'rb'), as_attachment=True)
 
 def image(request, filename):
     if request.method == 'GET':

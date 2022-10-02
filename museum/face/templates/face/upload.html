@@ -11,7 +11,7 @@
     </form>
 
     <p>Upload Video</p>
-    <form method="post" action="{% url 'upload_video' %}">
+    <form method="post" action="{% url 'upload_video' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <p>{{ video_form.upload_file.label_tag }} {{ video_form.upload_file.help_text }}</p>
         {{ video_form.upload_file }}
