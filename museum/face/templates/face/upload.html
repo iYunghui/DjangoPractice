@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
 
+{% load rest_framework %}
+
 {% block content %}
 
     <p>Upload Image</p>
     <form method="post" action="{% url 'upload_image' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <p>{{ image_form.upload_file.label_tag }} {{ image_form.upload_file.help_text }}</p>
-        {{ image_form.upload_file }}
+        {% render_form image_form %}
         <input type="submit" value="Upload Image">
     </form>
 
     <p>Upload Video</p>
     <form method="post" action="{% url 'upload_video' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <p>{{ video_form.upload_file.label_tag }} {{ video_form.upload_file.help_text }}</p>
-        {{ video_form.upload_file }}
+        {% render_form video_form %}
         <input type="submit" value="Upload Video">
     </form>
 

@@ -1,54 +1,58 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import UploadImageForm, UploadVideoForm
 from .models import Media
+from .serializers import ImageSerializer, VideoSerializer
 from django.urls import reverse
 import datetime
 import os
 from pony.orm import *
 import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, FileResponse
-from django.core import serializers
-import mimetypes
-
+from rest_framework.generics import GenericAPIView
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.views import APIView
+from rest_framework.viewsets import ViewSet
+from rest_framework.response import Response
 
 # Create your views here.
-def upload(request):
-    if request.method == 'GET':
-        image_form = UploadImageForm()
-        video_form = UploadVideoForm()
-    
-    return render(request, 'face/upload.html', {'image_form': image_form, 'video_form': video_form})
+class Upload(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'face/upload.html'
+    serializer_class = ImageSerializer
 
-def upload_video(request):
-    if request.method == 'POST':
-        form = UploadVideoForm(request.POST, request.FILES)
-        if form.is_valid():
-            print(request)
-            write_to_DB(request.FILES['upload_file'].name, "video")            
-            handle_uploaded_file(request.FILES['upload_file'], "video")
-            return HttpResponse("upload success", status=200)
-        else:
-            print(request)
-            return HttpResponse(form.errors.as_json())
-    elif request.method == 'GET':
+    def get(self, request):
+        image_form = ImageSerializer
+        video_form = VideoSerializer
+        
+        return Response({'image_form': image_form, 'video_form': video_form})
+
+
+class UploadVideo(APIView):
+    def get(self, request):
         video_files = search_in_DB("", "video")
         return JsonResponse(video_files, safe=False)
-    
 
-def upload_image(request):
-    if request.method == 'POST':
-        form = UploadImageForm(request.POST, request.FILES)
-        if form.is_valid():
-            write_to_DB(request.FILES['upload_file'].name, "image")            
-            handle_uploaded_file(request.FILES['upload_file'], "image")
-            return HttpResponse("upload success", status=200)
-        else:
-            return HttpResponse(form.errors.as_json())
-    elif request.method == 'GET':
+    def post(self, request):
+        serializer = VideoSerializer(data=request.data)
+        if not serializer.is_valid():
+            return HttpResponse(serializer.error_messages)
+        write_to_DB(request.FILES['upload_file'].name, "video")            
+        handle_uploaded_file(request.FILES['upload_file'], "video")
+        return HttpResponse("upload success", status=200)
+
+class UploadImage(APIView):
+    def get(self, request):
         image_files = search_in_DB("", "image")
         return JsonResponse(image_files, safe=False)
-    else:
-        return redirect("/api/face/upload")
+
+    def post(self, request):
+        serializer = ImageSerializer(data=request.data)
+        if not serializer.is_valid():
+            return HttpResponse(serializer.error_messages)
+        write_to_DB(request.FILES['upload_file'].name, "image")            
+        handle_uploaded_file(request.FILES['upload_file'], "image")
+        return HttpResponse("upload success", status=200)
+
 
 def video(request, filename):
     if request.method == 'GET':
