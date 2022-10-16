@@ -3,4 +3,5 @@ migrations/
 venv/
 *.jpg
 *.png
+*.mp4
 *.cnf

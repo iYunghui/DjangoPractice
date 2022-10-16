@@ -12,12 +12,12 @@ import mimetypes
 
 
 # Create your views here.
-def upload(request):
-    if request.method == 'GET':
-        image_form = UploadImageForm()
-        video_form = UploadVideoForm()
+# def upload(request):
+#     if request.method == 'GET':
+#         image_form = UploadImageForm()
+#         video_form = UploadVideoForm()
     
-    return render(request, 'face/upload.html', {'image_form': image_form, 'video_form': video_form})
+#     return render(request, 'face/upload.html', {'image_form': image_form, 'video_form': video_form})
 
 def upload_video(request):
     if request.method == 'POST':
