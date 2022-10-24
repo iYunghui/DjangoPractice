@@ -12,5 +12,22 @@ class Media(db.Entity):
     upload_timestamp = Required(datetime.datetime, precision=6)
 
 sql_debug(True)
-db.bind(provider='mysql', host='127.0.0.1', user='root', passwd='password', db='museum_practice')
+
+host_name = ""
+user_name = ""
+password = ""
+db_name = ""
+with open('../museum.cnf') as f:
+    for line in f.readlines():
+        string = line.split()
+        if string[0] == 'DATABASE':
+            db_name = string[2].replace("\"", "")
+        elif string[0] == 'USER':
+            user_name = string[2].replace("\"", "")
+        elif string[0] == 'PASSWORD':
+            password = string[2].replace("\"", "")
+        elif string[0] == 'HOST':
+            host_name = string[2].replace("\"", "")
+
+db.bind(provider='mysql', host=host_name, user=user_name, passwd=password, db=db_name)
 db.generate_mapping(create_tables=True)

@@ -3,4 +3,6 @@ migrations/
 venv/
 *.jpg
 *.png
+*.mp4
 *.cnf
+secret_key.txt
